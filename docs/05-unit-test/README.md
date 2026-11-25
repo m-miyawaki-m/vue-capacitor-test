@@ -2,7 +2,7 @@
 
 | 段階 | 業務の確認 | フレームワーク連携の確認 | 主な手段 |
 | --- | --- | --- | --- |
-| 単体 | 入庫・在庫管理の検索条件を正しく組み立てる。カードや詳細に必要な項目を取り出す。 | 画面制御 Store が画面状態を更新する。レスポンス Store の action が条件ごとに保存し、取得失敗時に前回成功データを保持する。生成 Zod スキーマが必須項目欠落や型違いを検出する。 | Vitest。部品の props・イベントは Vue Test Utils、部品単独の表示状態や操作は Storybook |
+| 単体 | 入庫・在庫管理の検索条件を正しく組み立てる。カードや詳細に必要な項目を取り出す。 | 画面制御 Store が開閉状態、実行済み条件の保存と切り替えを扱う。レスポンス Store の action が条件ごとに保存し、取得失敗時に前回成功データを保持する。生成 Zod スキーマが必須項目欠落や型違いを検出する。 | Vitest。部品の props・イベントは Vue Test Utils、部品単独の表示状態や操作は Storybook |
 
 共通 UI は Storybook で、HT の縦幅でのフッター、アコーディオンの開閉、長い商品名のカード、遷移候補が多い一覧を確認する。必要な操作は story の `play` に記述し、Vitest アドオンで実行する。採用する Vue・Vite の構成で Vitest と Storybook が動くことを導入時に確認する。
 
@@ -16,7 +16,7 @@ Web 版の `HtBridge` は Vitest で固定応答と不正入力を確認する�
 
 ### 設定と実行
 
-1. Storybook を Vue 3・Vite 向けに設定し、`.storybook/main.ts` のフレームワークに `@storybook/vue3-vite` を使う。`.storybook/preview.ts` からアプリと同じ Vuetify 設定を登録する。
+1. Storybook を Vue 3・Vite 向けに設定し、`.storybook/main.ts` のフレームワークに `@storybook/vue3-vite` を使う。`.storybook/preview.ts` からアプリと同じ Vuetify 設定を登録する。`MainLayout` を描画する story は、Vuetify のレイアウトを初期化するため preview のデコレーターで `VApp` に包む。
 2. Storybook の導入後、`npx storybook add @storybook/addon-vitest` を実行する。生成・変更された設定を確認し、Vitest の `storybook` プロジェクトに `storybookTest` プラグインと Playwright プロバイダーの Browser Mode があることを確認する。プロジェクト名が違う場合は実行コマンドの名前を合わせる。
 3. 通常の Vitest プロジェクトには Store・ロジックのテストと Vue Test Utils の設定を置く。Storybook プロジェクトには stories とブラウザの設定を置き、jsdom 専用の設定は通常のプロジェクト内に留める。
 4. Storybook の画面で story を開き、表示と操作を確認する。自動実行は `npx vitest run --project=storybook`、通常の単体テストはプロジェクトの `npm run test:unit -- --run` を使う。通常のスクリプトから Storybook プロジェクトも実行される場合は、通常用のプロジェクト名で絞る。
@@ -28,7 +28,8 @@ Web 版の `HtBridge` は Vitest で固定応答と不正入力を確認する�
 
 ```ts
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
-import { expect } from 'storybook/test'
+import { expect, fn } from 'storybook/test'
+import { ref } from 'vue'
 import InventorySearchForm from './InventorySearchForm.vue'
 
 const meta = {
@@ -39,11 +40,23 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Closed: Story = {
-  args: { productCode: '', initiallyExpanded: false },
-  play: async ({ canvas, userEvent }) => {
+  args: { productCode: '', expanded: false, 'onUpdate:expanded': fn() },
+  render: (args) => ({
+    components: { InventorySearchForm },
+    setup: () => ({ args, expanded: ref(args.expanded) }),
+    template: `
+      <InventorySearchForm
+        :product-code="args.productCode"
+        v-model:expanded="expanded"
+        @update:expanded="args['onUpdate:expanded']?.($event)"
+      />
+    `,
+  }),
+  play: async ({ canvas, userEvent, args }) => {
     const panel = canvas.getByRole('button', { name: '商品コード' })
     await expect(panel).toHaveAttribute('aria-expanded', 'false')
     await userEvent.click(panel)
+    await expect(args['onUpdate:expanded']).toHaveBeenCalledWith(true)
     await expect(canvas.getByRole('textbox', { name: '商品コード' })).toBeVisible()
   },
 }
@@ -127,3 +140,22 @@ Vitest で生成 Fetch クライアントの呼び出しを差し替える。手
 | クライアントの通信失敗 | `kind: 'network'` の `ApiError` で拒否される。 |
 
 [在庫 PoC の成功と失敗の契約](../04-detailed-design/ht-api.md#在庫-poc-の成功と失敗の契約)
+
+## 単体で立証すること
+
+対象の関数・Store・単独部品について、決められた入力や初期状態から期待する戻り値、状態、イベントが得られることを立証する。外部の取得関数やコールバックは差し替え、対象の振る舞いを絞って確認する。
+
+- 関数は入力の正規化、境界値、失敗時の分類を確認する。API 処理の単体では生成クライアントを差し替え、HTTP 判定と Zod 検証を実行する。
+- Store は条件別の保存、同じキーの再取得失敗時の保持、応答順が逆転したときの更新を確認する。
+- UI 部品単独では Storybook の固定 props で表示・操作・通知を確認する。
+
+**作成時点**は、詳細設計で契約や期待結果を決めた時点で観点とケースを用意する。テストコードは対象の実装と同じ変更で作り、レビューに出す時点で実行結果を確認する。
+
+| ケース ID | 対象と根拠 | 初期状態・差し替え | 入力・操作 | 期待結果 | 実行手段・結果 |
+| --- | --- | --- | --- | --- | --- |
+| UT-INV-01 | レスポンス Store・AC3 | A001 の成功結果2件。次の API 呼び出しはエラー。 | 同じキーで再取得。 | データ2件と前回の取得時刻が残り、エラーが記録される。 | Vitest・作成予定 |
+| UT-INV-02 | レスポンス Store・AC3 | API が A001 と B002 で別の成功データを返す。 | A001、B002 の順に取得する。 | キーごとに対応する結果を参照できる。 | Vitest・作成予定 |
+| UT-INV-03 | レスポンス Store・AC3 | 同一キーで先発・後発の要求を開始し、応答順を制御する。 | 後発を成功させた後、先発を成功または失敗させる。 | 後発の結果・状態・取得時刻が変わらない。 | Vitest・作成予定 |
+| UT-INV-04 | API 境界・AC3 | 生成クライアントが HTTP 200 と、在庫数を文字列にした本文を返す。 | 在庫取得関数を呼ぶ。 | `kind: 'contract'` のエラーになる。 | Vitest・作成予定 |
+| UT-INV-05 | 検索フォーム・AC4 | 閉じたフォームに固定 props を渡す。 | story を開き、見出しを押す。 | パネルが開き、商品コード入力欄が表示される。 | Storybook・作成予定 |
+| UT-INV-06 | `InventoryResultCard` と `InventorySearchResults`・AC4 | カード用データ、空、エラーの story をそれぞれ準備する。 | 各 story を表示する。 | 商品名・在庫数、結果なし、取得エラーがそれぞれの状態で表示される。 | Storybook・作成予定 |

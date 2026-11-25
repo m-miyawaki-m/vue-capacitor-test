@@ -73,7 +73,7 @@ server.use(http.get(url, () =>
 
 ### Vitest で再取得失敗を確認する例
 
-モックのセットアップを読み込んだ結合テストで、実際の一覧画面を操作する。以下のマウント用ヘルパーは、Pinia・Vuetify を登録した PoC のテスト用ヘルパーを想定する。
+モックのセットアップを読み込んだ結合テストで、実際の一覧画面を操作する。以下のマウント用ヘルパーは、Pinia・Vuetify を登録し、`MainLayout` を含む画面を `VApp` に包む PoC のテスト用ヘルパーを想定する。
 
 ```ts
 it('再取得に失敗しても前回の結果を表示する', async () => {
@@ -93,7 +93,7 @@ it('再取得に失敗しても前回の結果を表示する', async () => {
 
 ## Storybook で確認する UI コンポーネント間の連携
 
-検索フォームを `MainLayout` のメイン領域に置き、フッターの枠には画面側から検索ボタンを渡す。この構成を持つ `InventorySearchPanel` を story に表示する。アコーディオンを開いて商品コードを入力し、フッターの検索ボタンを押すと、親に検索イベントが届くことを確認する。この例の確認範囲は、部品の操作から親へのイベント通知まで。
+検索フォームを `MainLayout` のメイン領域に置き、フッターの枠には画面側から検索ボタンを渡す。story の隣に置くテスト専用の `InventorySearchPanel` で、実際の `MainLayout`・`InventorySearchForm`・`InventorySearchFooter` を組み合わせる。ラッパーが入力と開閉の model を保持し、フッターの検索イベントをそのまま親に返す。preview のデコレーターで `VApp` に包む。アコーディオンを開いて商品コードを入力し、フッターの検索ボタンを押すと、親に検索イベントが届くことを確認する。この例の確認範囲は、部品の操作から親へのイベント通知まで。
 
 ```ts
 import type { Meta, StoryObj } from '@storybook/vue3-vite'
@@ -115,7 +115,10 @@ export const SearchFromFooter: Story = {
 
     await userEvent.click(canvas.getByRole('button', { name: '商品コード' }))
     const input = await canvas.findByRole('textbox', { name: '商品コード' })
-    await userEvent.type(input, 'A001')
+    await userEvent.type(input, '   ')
+    await expect(submit).toBeDisabled()
+    await userEvent.clear(input)
+    await userEvent.type(input, ' A001 ')
     await expect(submit).toBeEnabled()
 
     await userEvent.click(submit)
@@ -127,7 +130,7 @@ export const SearchFromFooter: Story = {
 }
 ```
 
-この例では、空入力時に検索ボタンが無効で、親へ条件オブジェクトを通知する UI を仮定している。実装前にボタンの有効条件、ラベル、イベントの引数を設計に揃える。実行手順は [Vitest と Storybook の連携手順](../05-unit-test/README.md#vitest-と-storybook-の連携手順) を参照する。
+この例では、空入力時に検索ボタンが無効で、親へ条件オブジェクトを通知する UI を仮定している。ボタンの有効条件とイベントの引数は [在庫検索の部品契約](../04-detailed-design/ht-vue-components.md#在庫検索-poc-の部品と契約) に従う。実行手順は [Vitest と Storybook の連携手順](../05-unit-test/README.md#vitest-と-storybook-の連携手順) を参照する。
 
 ### Storybook と Pinia の使い分け
 
@@ -153,3 +156,22 @@ setup((app, context) => {
 採用版の Storybook で `setup` に story のコンテキストが渡ることと、`@pinia/testing` が Pinia の採用版と互換であることを導入時に確認する。
 
 [Storybook の操作テスト](https://storybook.js.org/docs/writing-tests/interaction-testing) · [Pinia のテスト用 Store](https://pinia.vuejs.org/cookbook/testing.html)
+
+## 結合で立証すること
+
+実際に組み合わせた部品・レイヤーの間で、操作、値、状態が設計どおりに渡ることを立証する。ケースごとに実物をつなぐ範囲と差し替える境界を記録する。
+
+| 結合の範囲 | 立証すること | 手段 |
+| --- | --- | --- |
+| UI コンポーネント間 | フォームの入力がフッターの有効状態に反映され、検索イベントが親へ正しい値で届く。 | Storybook の `play`。親の取得処理はスパイに差し替える。 |
+| 画面・データ処理間 | 画面から送信した条件が API に届き、応答の検証、Store の更新、結果やエラーの再表示につながる。 | Vitest＋Vue Test Utils＋MSW。画面・Store・Orval・Zodをつなぎ、HTTP 応答を差し替える。 |
+
+**作成時点**は、基本設計で画面間・部品間の連携を決めるときに観点を挙げ、詳細設計でイベント・API・状態の契約が決まった時点で前提と期待結果を確定する。関連部品がつながる変更でテストコードを作り、結合を確認できる時点で実行する。
+
+| ケース ID | 対応する基準・シナリオ | 実際につなぐ範囲 | 差し替え・前提 | 操作 | 期待結果 | 実行手段・結果 |
+| --- | --- | --- | --- | --- | --- | --- |
+| IT-INV-01 | AC2・SC-INV-02 | フォーム、MainLayout、フッター | 親の検索ハンドラーをスパイにする。 | 空白だけ入力し、次に ` A001 ` を入力して検索。 | 空白時はボタンが無効。検索時に `A001` が親へ1回届く。 | Storybook・作成予定 |
+| IT-INV-02 | AC3・SC-INV-04 | 画面、Store、Orval、Zod | MSW で初回200、再検索時は不正な200本文。 | 同じ商品コードで再検索。 | 契約不一致で取得エラーを表示し、前回のカードも表示する。 | Vitest＋MSW・作成予定 |
+| IT-INV-03 | AC2・SC-INV-02 | 画面、Store、Orval、Zod | MSW で正常データを返す。 | 空白だけ入力し、次に ` A001 ` を入力して検索。 | 空白だけでは API に送信しない。検索時のクエリに `productCode=A001` が入る。 | Vitest＋MSW・作成予定 |
+| IT-INV-04 | AC2・SC-INV-03 | 画面、Store、Orval、Zod | MSW で `200 { items: [] }` を返す。 | 有効なコードを検索。 | カードがなく、「結果なし」が表示される。 | Vitest＋MSW・作成予定 |
+| IT-INV-05 | AC2・SC-INV-04 | 画面、Store、Orval、Zod | 同じキーで成功後、MSW を 500 に切り替える。 | 同じコードで再検索。 | 取得エラーを表示し、前回のカードを保持する。 | Vitest＋MSW・作成予定 |

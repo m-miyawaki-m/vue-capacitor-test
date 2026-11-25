@@ -41,7 +41,7 @@
         <mxCell id="detailHeader" value="‹ 戻る     データ詳細" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=0;arcSize=10;fillColor=#dbeafe;strokeColor=#93c5fd;fontColor=#0f172a;fontSize=15;fontStyle=1;">
           <mxGeometry as="geometry" x="802" y="162" width="246" height="52" />
         </mxCell>
-        <mxCell id="main" value="メインコンテンツ&#10;（RouterView）" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=0;arcSize=10;fillColor=#ffffff;strokeColor=#cbd5e1;fontColor=#0f172a;fontSize=16;">
+        <mxCell id="main" value="メインコンテンツ&#10;（ルート画面から渡す）" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=0;arcSize=10;fillColor=#ffffff;strokeColor=#cbd5e1;fontColor=#0f172a;fontSize=16;">
           <mxGeometry as="geometry" x="62" y="225" width="246" height="320" />
         </mxCell>
         <mxCell id="query" value="▾ キーワード&#10;［ キーワードを入力 ］" vertex="1" parent="1" style="rounded=1;whiteSpace=wrap;html=0;arcSize=10;fillColor=#ffffff;strokeColor=#cbd5e1;fontColor=#0f172a;fontSize=14;">

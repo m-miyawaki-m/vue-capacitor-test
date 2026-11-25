@@ -12,6 +12,8 @@
 | 公開前の資料チェック | [レビュー済み](ht-publication/01-review/README.md) | [必須指摘は対応済み](ht-poc-architecture/02-response/README.md) | [must 0件](ht-poc-architecture/03-rereview/README.md) | GitHub 認証と公開作業は未完了。 |
 | 自動生成・モック切り替え・Storybook の手順 | [未レビュー](../README.md#技術手順インデックス) | — | — | 生成関数と設定例の照合、Windows での実行は未確認。 |
 | Vitest の Store 単体・Storybook の UI 連携の追記 | [初回レビュー済み](ht-test-methods/01-review/README.md) | [対応済み](ht-test-methods/02-response/README.md) | [Claude 同意・must 0件](ht-test-methods/03-rereview/README.md) | コード例の実行は未確認。 |
+| Vue 3・Vuetify 4 のコンポーネント実装方針 | [初回レビュー済み](ht-vue-components/01-review/README.md) | [対応済み](ht-vue-components/02-response/README.md) | [Claude 同意・must 0件](ht-vue-components/03-rereview/README.md) | PoC 実装とテスト例の実行は未確認。 |
+| テスト方針と業務シナリオ | [初回レビュー済み](ht-test-strategy/01-review/README.md) | [対応済み](ht-test-strategy/02-response/README.md) | [Claude 同意・must 0件](ht-test-strategy/03-rereview/README.md) | テストコードの作成・実行は未実施。 |
 
 「—」は指摘対応や再レビューの記録がない項目を示す。
 
