@@ -16,6 +16,10 @@ Store の action と保存ルールは Vitest で確認し、詳細から戻っ�
 
 [Pinia の Store 定義](https://pinia.vuejs.org/core-concepts/) · [Pinia の actions](https://pinia.vuejs.org/core-concepts/actions.html) · [Pinia のテスト](https://pinia.vuejs.org/cookbook/testing.html)
 
+## 在庫 PoC の検索条件の正規化
+
+商品コードの前後の空白を取り除く処理は共通関数に置く。検索画面は入力の確認と確定時にその関数を使い、空白のみなら取得を依頼しない。レスポンス Store は、取得 action と結果の参照の両方で同じ関数を使い、同じ正規化済みのキーを参照する。API 境界には正規化済みの条件を渡す。
+
 ## 取得に失敗した場合と同時取得
 
 検索キーごとに `data`、`status`、`error`、`fetchedAt` を持つ案とする。取得失敗時は同じキーの最後の成功データと取得時刻を保持し、エラーを表示する。成功データがある場合は、その表示を維持したうえで再取得できるようにする。

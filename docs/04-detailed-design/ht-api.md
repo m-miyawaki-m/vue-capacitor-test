@@ -63,3 +63,16 @@ export default defineConfig({
 - 下記のテスト用ファイルと固定データは手書きで管理する。Orval の設定・生成の実走は PoC 着手時に行う。
 
 [Orval の出力オプション](https://orval.dev/docs/reference/configuration/output/) · [Orval の Zod 生成](https://orval.dev/docs/guides/zod/) · [Zod の基本](https://zod.dev/basics) · [MSW によるテストデータの切り替え](../06-integration-test/README.md#msw-によるテストデータの切り替え)
+
+### 在庫 PoC の成功と失敗の契約
+
+`fetchInventory(criteria)` は、成功時に Zod で検証した本文を返し、失敗時に `ApiError` を投げる。例のコンストラクターは `new ApiError(kind, message)` とし、`kind` で失敗の種類を識別する。
+
+| 応答・失敗 | API 境界の結果 |
+| --- | --- |
+| HTTP 200、仕様に適合する本文 | `safeParse` の成功データを返す。空の `items` も成功。 |
+| HTTP 500 などの非成功ステータス | `ApiError('http', message)` を投げる。成功本文用のスキーマは適用しない。 |
+| HTTP 200、必須項目がない、または型が不正 | `ApiError('contract', message)` を投げる。 |
+| HTTP 応答を受け取れない通信失敗 | `ApiError('network', message)` を投げる。 |
+
+レスポンス Store の取得 action はこのエラーを受け、最新要求であれば対象キーに失敗状態を記録する。最後に成功した本文と取得時刻は保持する。この API 境界の契約は在庫 PoC に適用する。

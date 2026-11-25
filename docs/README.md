@@ -37,6 +37,8 @@
 | [Orval・Zod・Faker・MSW の自動生成](04-detailed-design/ht-api.md#在庫-poc-の自動生成手順) | `open.yaml` と Orval 設定を用意し、`npm run api:generate` で Fetch クライアント、型、Zod スキーマ、モックを生成する。 |
 | [テスト用の値と応答の差し替え](06-integration-test/README.md#msw-によるテストデータの切り替え) | MSW で固定2件、空配列、HTTP 500、Zod 検証に失敗する本文を返す。再取得に失敗しても前回の結果が残ることを Vitest で確認する。 |
 | [Vitest と Storybook の連携](05-unit-test/README.md#vitest-と-storybook-の連携手順) | Storybook の Vitest アドオンを設定し、`args` で部品の初期状態、`play` で操作と期待結果を指定する。 |
+| [Vitest でのレスポンス Store 単体テスト](05-unit-test/README.md#レスポンス-store-の単体テスト) | テストごとに Pinia を作り、API を差し替えて取得 action と保存状態を確認する。HTTP 判定・Zod 検証の単体観点も参照できる。 |
+| [Storybook での UI 結合テスト](06-integration-test/README.md#storybook-で確認する-ui-コンポーネント間の連携) | 検索フォームとフッターを組み合わせ、操作と親へのイベント通知を確認する。Pinia が必要な場合の設定方針も参照できる。 |
 | [Playwright の業務シナリオ](08-poc/ht-inventory-poc.md#受入基準とテスト) | Windows の Chrome でメニューから在庫検索を実行し、GET のクエリと固定2件の結果表示を確認する。 |
 
 ## フェーズ別の資料

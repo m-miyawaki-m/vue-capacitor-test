@@ -90,3 +90,66 @@ it('再取得に失敗しても前回の結果を表示する', async () => {
 ```
 
 `search` はフォーム入力と検索ボタンの操作、`resultCards` と `errorMessage` は画面に描画された要素の取得を担当する。応答を不正本文に差し替えたケースも同様に確認する。
+
+## Storybook で確認する UI コンポーネント間の連携
+
+検索フォームを `MainLayout` のメイン領域に置き、フッターの枠には画面側から検索ボタンを渡す。この構成を持つ `InventorySearchPanel` を story に表示する。アコーディオンを開いて商品コードを入力し、フッターの検索ボタンを押すと、親に検索イベントが届くことを確認する。この例の確認範囲は、部品の操作から親へのイベント通知まで。
+
+```ts
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { expect, fn } from 'storybook/test'
+import InventorySearchPanel from './InventorySearchPanel.vue'
+
+const meta = {
+  component: InventorySearchPanel,
+} satisfies Meta<typeof InventorySearchPanel>
+
+export default meta
+type Story = StoryObj<typeof meta>
+
+export const SearchFromFooter: Story = {
+  args: { onSearch: fn() },
+  play: async ({ canvas, userEvent, args }) => {
+    const submit = canvas.getByRole('button', { name: '検索' })
+    await expect(submit).toBeDisabled()
+
+    await userEvent.click(canvas.getByRole('button', { name: '商品コード' }))
+    const input = await canvas.findByRole('textbox', { name: '商品コード' })
+    await userEvent.type(input, 'A001')
+    await expect(submit).toBeEnabled()
+
+    await userEvent.click(submit)
+    await expect(args.onSearch).toHaveBeenCalledTimes(1)
+    await expect(args.onSearch).toHaveBeenCalledWith({
+      productCode: 'A001',
+    })
+  },
+}
+```
+
+この例では、空入力時に検索ボタンが無効で、親へ条件オブジェクトを通知する UI を仮定している。実装前にボタンの有効条件、ラベル、イベントの引数を設計に揃える。実行手順は [Vitest と Storybook の連携手順](../05-unit-test/README.md#vitest-と-storybook-の連携手順) を参照する。
+
+### Storybook と Pinia の使い分け
+
+- 表示用の部品は `args` で固定の props を渡す。例えば、前回の結果2件と取得エラーを渡し、カードとエラーが同時に表示されることを確認する。
+- 対象コンポーネントが Pinia を直接参照し、共有状態に応じた UI が確認対象なら、story ごとに新しいテスト用 Pinia を用意する。`createTestingPinia` の `initialState` で Store ID ごとに状態をセットする。操作が action に届くことまで確認する場合は action をスタブしたまま呼び出しを検証する。
+- Store の取得・保存処理は Vitest で確認する。実際の Store、Orval、Zod をつないだ検索全体は Vitest＋MSW で確認する。
+
+テスト用 Pinia の登録例。Store を使う story の `parameters.piniaInitialState` に、実際の Store ID をキーとする初期状態を置く。`.storybook/preview.ts` の `setup` でその状態を受け取り、レンダリング用の Vue アプリに登録する。既存の Vuetify 登録は同じ設定内に維持する。
+
+```ts
+import { createTestingPinia } from '@pinia/testing'
+import { setup } from '@storybook/vue3-vite'
+import { fn } from 'storybook/test'
+
+setup((app, context) => {
+  const initialState = context?.parameters.piniaInitialState
+  if (initialState) {
+    app.use(createTestingPinia({ initialState, createSpy: fn }))
+  }
+})
+```
+
+採用版の Storybook で `setup` に story のコンテキストが渡ることと、`@pinia/testing` が Pinia の採用版と互換であることを導入時に確認する。
+
+[Storybook の操作テスト](https://storybook.js.org/docs/writing-tests/interaction-testing) · [Pinia のテスト用 Store](https://pinia.vuejs.org/cookbook/testing.html)
