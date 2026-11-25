@@ -41,6 +41,13 @@
 | [Storybook での UI 結合テスト](06-integration-test/README.md#storybook-で確認する-ui-コンポーネント間の連携) | 検索フォームとフッターを組み合わせ、操作と親へのイベント通知を確認する。Pinia が必要な場合の設定方針も参照できる。 |
 | [Playwright の業務シナリオ](08-poc/ht-inventory-poc.md#受入基準とテスト) | Windows の Chrome でメニューから在庫検索を実行し、GET のクエリと固定2件の結果表示を確認する。 |
 
+## テスト方針とシナリオ
+
+| 知りたいこと | 資料 |
+| --- | --- |
+| 業務フロー・操作シナリオをどう定義するか | [定義する項目](01-requirements/ht-design.md#業務フローとシナリオの定義) · [在庫 PoC の例](08-poc/ht-inventory-poc.md#業務フローとシナリオ) |
+| 何を立証し、いつケースを作るか | [単体](05-unit-test/README.md#単体で立証すること) · [結合](06-integration-test/README.md#結合で立証すること) · [総合](07-system-test/README.md#業務シナリオで立証すること) |
+
 ## フェーズ別の資料
 
 | フェーズ | 資料 |
@@ -48,7 +55,7 @@
 | 01 要件定義 | [対象業務、初回範囲、受入基準](01-requirements/ht-design.md) |
 | 02 基本設計 | [レイアウトとコンポーネント](02-basic-design/ht-layout-components.md) · [画面・遷移図](02-basic-design/ht-screen-layout.drawio) |
 | 03 概要設計 | [構成と技術方針](03-overview-design/ht-technical-research.md) |
-| 04 詳細設計 | [API 生成と実行時検証](04-detailed-design/ht-api.md) · [Pinia の状態管理](04-detailed-design/ht-store.md) · [画面とネイティブ疎通](04-detailed-design/ht-native-and-screen.md) |
+| 04 詳細設計 | [API 生成と実行時検証](04-detailed-design/ht-api.md) · [Pinia の状態管理](04-detailed-design/ht-store.md) · [画面とネイティブ疎通](04-detailed-design/ht-native-and-screen.md) · [Vue・Vuetify の部品設計](04-detailed-design/ht-vue-components.md) |
 | 05 単体テスト | [ロジック・Store・コンポーネントの確認](05-unit-test/README.md) |
 | 06 結合テスト | [画面・Store・API 境界の連携確認](06-integration-test/README.md) |
 | 07 総合テスト | [ブラウザ E2E と Android 受入確認](07-system-test/README.md) |
