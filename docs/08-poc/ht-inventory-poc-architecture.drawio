@@ -1,0 +1,287 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net">
+  <diagram id="poc-runtime" name="在庫検索の実行フロー">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageWidth="1169" pageHeight="827">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="faker-area" value="Faker" vertex="1" parent="1" style="rounded=1;arcSize=7;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#047857;strokeWidth=2;dashed=1;dashPattern=6 4;align=left;verticalAlign=top;spacingLeft=10;spacingTop=5;fontStyle=1;fontSize=14;fontColor=#047857;">
+          <mxGeometry as="geometry" x="790" y="465" width="340" height="135" />
+        </mxCell>
+        <mxCell id="msw-area" value="MSW" vertex="1" parent="1" style="rounded=1;arcSize=7;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#6d28d9;strokeWidth=2;dashed=1;dashPattern=6 4;align=left;verticalAlign=top;spacingLeft=10;spacingTop=5;fontStyle=1;fontSize=14;fontColor=#6d28d9;">
+          <mxGeometry as="geometry" x="790" y="319" width="340" height="128" />
+        </mxCell>
+        <mxCell id="orval-area" value="Orval 生成物" vertex="1" parent="1" style="rounded=1;arcSize=7;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#1d4ed8;strokeWidth=2;dashed=1;dashPattern=6 4;align=left;verticalAlign=top;spacingLeft=10;spacingTop=5;fontStyle=1;fontSize=14;fontColor=#1d4ed8;">
+          <mxGeometry as="geometry" x="790" y="157" width="340" height="130" />
+        </mxCell>
+        <mxCell id="title" value="在庫検索の実行フロー" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=none;strokeColor=none;fontColor=#0f172a;fontSize=24;spacing=8;align=left;fontStyle=1;">
+          <mxGeometry as="geometry" x="45" y="35" width="1070" height="45" />
+        </mxCell>
+        <mxCell id="subtitle" value="Windows の Chrome で確認する Web PoC" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=none;strokeColor=none;fontColor=#0f172a;fontSize=14;spacing=8;align=left;fontStyle=1;">
+          <mxGeometry as="geometry" x="45" y="90" width="1070" height="44" />
+        </mxCell>
+        <mxCell id="screen" value="Vue Router → 在庫検索&#10;MainLayout のフッターで検索" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#eff6ff;strokeColor=#93c5fd;fontColor=#0f172a;fontSize=15;spacing=8;">
+          <mxGeometry as="geometry" x="45" y="190" width="200" height="80" />
+        </mxCell>
+        <mxCell id="action" value="画面制御 Store&#10;確定した検索条件を保持" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#eff6ff;strokeColor=#93c5fd;fontColor=#0f172a;fontSize=15;spacing=8;">
+          <mxGeometry as="geometry" x="45" y="340" width="200" height="75" />
+        </mxCell>
+        <mxCell id="fetch" value="Orval 生成の Fetch クライアント&#10;HTTP リクエスト送信・応答受信" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#eff6ff;strokeColor=#93c5fd;fontColor=#0f172a;fontSize=15;spacing=8;">
+          <mxGeometry as="geometry" x="805" y="190" width="310" height="80" />
+        </mxCell>
+        <mxCell id="worker" value="ブラウザの MSW ワーカー&#10;生成ハンドラで GET を捕捉" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#f5f3ff;strokeColor=#c4b5fd;fontColor=#0f172a;fontSize=15;spacing=8;">
+          <mxGeometry as="geometry" x="805" y="350" width="310" height="78" />
+        </mxCell>
+        <mxCell id="submit" source="screen" target="action" value="条件を保存" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;endFill=1;strokeColor=#475569;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="lookup" source="screen" target="response-action" value="条件を渡す" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;endFill=1;strokeColor=#475569;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="get" source="fetch" target="worker" value="GET" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;endFill=1;strokeColor=#475569;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;exitX=0.25;exitY=1;entryX=0.25;entryY=0;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="url" value="GET /api/inventory?productCode=A001" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#f8fafc;strokeColor=#cbd5e1;fontColor=#0f172a;fontSize=14;spacing=8;">
+          <mxGeometry as="geometry" x="800" y="119" width="315" height="32" />
+        </mxCell>
+        <mxCell id="mock" value="生成 Faker ファクトリ&#10;開発時は生成値&#10;テスト時は固定2件に上書き" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#f5f3ff;strokeColor=#c4b5fd;fontColor=#0f172a;fontSize=14;spacing=8;">
+          <mxGeometry as="geometry" x="805" y="500" width="310" height="83" />
+        </mxCell>
+        <mxCell id="response-data" source="mock" target="worker" value="モックデータ" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;endFill=1;strokeColor=#475569;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;exitX=0.5;exitY=0;entryX=0.5;entryY=1;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="validate" value="手書きの API 応答処理&#10;HTTP 判定・Zod 本文検証" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#ecfdf5;strokeColor=#6ee7b7;fontColor=#0f172a;fontSize=15;spacing=8;">
+          <mxGeometry as="geometry" x="536" y="350" width="215" height="85" />
+        </mxCell>
+        <mxCell id="response" source="worker" target="fetch" value="HTTP 応答" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;endFill=1;strokeColor=#475569;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;exitX=0.75;exitY=0;entryX=0.75;entryY=1;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="saved" value="レスポンス Store&#10;成功本文をキー別に保存" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#ecfdf5;strokeColor=#059669;fontColor=#0f172a;fontSize=14;spacing=8;">
+          <mxGeometry as="geometry" x="290" y="350" width="195" height="85" />
+        </mxCell>
+        <mxCell id="valid" source="validate" target="saved" value="成功" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;endFill=1;strokeColor=#475569;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;exitX=0;exitY=0.5;entryX=1;entryY=0.5;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="result" value="検索・一覧画面&#10;結果・エラーを参照して表示" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#eff6ff;strokeColor=#93c5fd;fontColor=#0f172a;fontSize=13;spacing=8;">
+          <mxGeometry as="geometry" x="45" y="500" width="200" height="83" />
+        </mxCell>
+        <mxCell id="display" source="saved" target="result" value="結果" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;endFill=1;strokeColor=#475569;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;exitX=0;exitY=0.85;entryX=1;entryY=0.25;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="failure" value="同じレスポンス Store&#10;取得エラーを記録&#10;前回成功データを保持" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#ecfdf5;strokeColor=#059669;fontColor=#0f172a;fontSize=14;spacing=8;">
+          <mxGeometry as="geometry" x="290" y="500" width="195" height="83" />
+        </mxCell>
+        <mxCell id="invalid" source="validate" target="failure" value="通信・HTTP・検証エラー" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;endFill=1;strokeColor=#475569;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=1;entryY=0.5;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="empty" value="空白のみの入力は送信しない。成功応答が空配列なら「結果なし」を表示する。" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#f8fafc;strokeColor=#cbd5e1;fontColor=#0f172a;fontSize=15;spacing=8;">
+          <mxGeometry as="geometry" x="45" y="665" width="1070" height="54" />
+        </mxCell>
+        <mxCell id="generated-fetch" value="Orval 自動生成" vertex="1" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=0;fillColor=#fef3c7;strokeColor=#d97706;fontColor=#78350f;fontStyle=1;fontSize=12;">
+          <mxGeometry as="geometry" x="996" y="161" width="116" height="24" />
+        </mxCell>
+        <mxCell id="generated-msw" value="Orval 自動生成" vertex="1" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=0;fillColor=#fef3c7;strokeColor=#d97706;fontColor=#78350f;fontStyle=1;fontSize=12;">
+          <mxGeometry as="geometry" x="996" y="324" width="116" height="24" />
+        </mxCell>
+        <mxCell id="generated-faker" value="Orval 自動生成" vertex="1" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=0;fillColor=#fef3c7;strokeColor=#d97706;fontColor=#78350f;fontStyle=1;fontSize=12;">
+          <mxGeometry as="geometry" x="996" y="470" width="116" height="24" />
+        </mxCell>
+        <mxCell id="generated-zod-schema" value="Zod スキーマを自動生成" vertex="1" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=0;fillColor=#fef3c7;strokeColor=#d97706;fontColor=#78350f;fontStyle=1;fontSize=12;">
+          <mxGeometry as="geometry" x="594" y="322" width="157" height="24" />
+        </mxCell>
+        <mxCell id="generation-legend" value="黄色のラベルは生成コード。API 処理と Store の取得・状態更新はアプリ側で実装する。" vertex="1" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=0;fillColor=#fef3c7;strokeColor=#d97706;fontColor=#78350f;fontStyle=1;fontSize=12;">
+          <mxGeometry as="geometry" x="45" y="741" width="1070" height="32" />
+        </mxCell>
+        <mxCell id="response-action" value="レスポンス Store&#10;検索の取得 action" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#ecfdf5;strokeColor=#059669;fontColor=#0f172a;fontSize=15;spacing=8;">
+          <mxGeometry as="geometry" x="290" y="190" width="195" height="80" />
+        </mxCell>
+        <mxCell id="app-api" value="手書きの API 呼び出し&#10;URL を解決" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#ecfdf5;strokeColor=#6ee7b7;fontColor=#0f172a;fontSize=15;spacing=8;">
+          <mxGeometry as="geometry" x="536" y="190" width="215" height="80" />
+        </mxCell>
+        <mxCell id="request-api" source="response-action" target="app-api" value="取得" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;endFill=1;strokeColor=#475569;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="call-fetch" source="app-api" target="fetch" value="呼び出し" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;endFill=1;strokeColor=#475569;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="return-api" source="fetch" target="validate" value="結果・通信失敗" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;endFill=1;strokeColor=#475569;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;exitX=0;exitY=0.75;entryX=1;entryY=0.5;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="display-error" source="failure" target="result" value="エラー" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;endFill=1;strokeColor=#475569;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;exitX=0;exitY=0.5;entryX=1;entryY=0.5;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="poc-generation" name="API コードの生成">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageWidth="1169" pageHeight="827">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="faker-output-area" value="Faker" vertex="1" parent="1" style="rounded=1;arcSize=7;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#047857;strokeWidth=2;dashed=1;dashPattern=6 4;align=left;verticalAlign=top;spacingLeft=10;spacingTop=5;fontStyle=1;fontSize=14;fontColor=#047857;">
+          <mxGeometry as="geometry" x="921" y="440" width="210" height="122" />
+        </mxCell>
+        <mxCell id="msw-output-area" value="MSW" vertex="1" parent="1" style="rounded=1;arcSize=7;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#6d28d9;strokeWidth=2;dashed=1;dashPattern=6 4;align=left;verticalAlign=top;spacingLeft=10;spacingTop=5;fontStyle=1;fontSize=14;fontColor=#6d28d9;">
+          <mxGeometry as="geometry" x="702" y="440" width="202" height="122" />
+        </mxCell>
+        <mxCell id="generator-area" value="Orval の生成処理" vertex="1" parent="1" style="rounded=1;arcSize=7;whiteSpace=wrap;html=0;fillColor=none;strokeColor=#1d4ed8;strokeWidth=2;dashed=1;dashPattern=6 4;align=left;verticalAlign=top;spacingLeft=10;spacingTop=5;fontStyle=1;fontSize=14;fontColor=#1d4ed8;">
+          <mxGeometry as="geometry" x="335" y="185" width="265" height="163" />
+        </mxCell>
+        <mxCell id="title" value="API コードの生成" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=none;strokeColor=none;fontColor=#0f172a;fontSize=24;spacing=8;align=left;fontStyle=1;">
+          <mxGeometry as="geometry" x="45" y="35" width="1070" height="45" />
+        </mxCell>
+        <mxCell id="subtitle" value="open.yaml を原本にし、生成物をアプリ・開発モック・テストで利用する" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=none;strokeColor=none;fontColor=#0f172a;fontSize=14;spacing=8;align=left;fontStyle=1;">
+          <mxGeometry as="geometry" x="45" y="90" width="1070" height="44" />
+        </mxCell>
+        <mxCell id="spec" value="open.yaml&#10;GET /api/inventory&#10;クエリ・応答の契約" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#eff6ff;strokeColor=#93c5fd;fontColor=#0f172a;fontSize=15;spacing=8;">
+          <mxGeometry as="geometry" x="45" y="215" width="225" height="112" />
+        </mxCell>
+        <mxCell id="orval" value="Orval&#10;npm run api:generate" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#f5f3ff;strokeColor=#c4b5fd;fontColor=#0f172a;fontSize=15;spacing=8;">
+          <mxGeometry as="geometry" x="355" y="215" width="225" height="112" />
+        </mxCell>
+        <mxCell id="input" source="spec" target="orval" value="" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;endFill=1;strokeColor=#475569;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="client" value="Fetch クライアント・型&#10;API 呼び出しに利用" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#eff6ff;strokeColor=#93c5fd;fontColor=#0f172a;fontSize=15;spacing=8;">
+          <mxGeometry as="geometry" x="720" y="160" width="395" height="90" />
+        </mxCell>
+        <mxCell id="generate-client" source="orval" target="client" value="" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;endFill=1;strokeColor=#475569;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="zod" value="Zod スキーマ&#10;API 境界で成功本文を検証" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#ecfdf5;strokeColor=#6ee7b7;fontColor=#0f172a;fontSize=15;spacing=8;">
+          <mxGeometry as="geometry" x="720" y="305" width="395" height="90" />
+        </mxCell>
+        <mxCell id="generate-zod" source="orval" target="zod" value="" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;endFill=1;strokeColor=#475569;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="mocks" value="生成ハンドラ&#10;Fetch を捕捉" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#f5f3ff;strokeColor=#c4b5fd;fontColor=#0f172a;fontSize=15;spacing=8;">
+          <mxGeometry as="geometry" x="720" y="468" width="165" height="77" />
+        </mxCell>
+        <mxCell id="faker" value="生成ファクトリ&#10;モックデータを作成" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#f5f3ff;strokeColor=#c4b5fd;fontColor=#0f172a;fontSize=15;spacing=8;">
+          <mxGeometry as="geometry" x="939" y="468" width="174" height="77" />
+        </mxCell>
+        <mxCell id="generate-mocks" source="orval" target="mocks" value="" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;endFill=1;strokeColor=#475569;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="boundary" value="Orval がクライアント・型・Zod スキーマ・モックを生成する。モック側のファイル名は生成結果に合わせる。&#10;ブラウザ用ワーカー mockServiceWorker.js は MSW CLI で生成する。配布ビルドからモックを除く。" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#f8fafc;strokeColor=#cbd5e1;fontColor=#0f172a;fontSize=15;spacing=8;">
+          <mxGeometry as="geometry" x="45" y="595" width="1070" height="82" />
+        </mxCell>
+        <mxCell id="mock-uses-faker" source="faker" target="mocks" value="" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;endArrow=block;endFill=1;strokeColor=#475569;strokeWidth=2;exitX=0;exitY=0.5;entryX=1;entryY=0.5;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="generated-client" value="Orval 自動生成" vertex="1" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=0;fillColor=#fef3c7;strokeColor=#d97706;fontColor=#78350f;fontStyle=1;fontSize=12;">
+          <mxGeometry as="geometry" x="980" y="167" width="116" height="24" />
+        </mxCell>
+        <mxCell id="generated-zod" value="Orval 自動生成" vertex="1" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=0;fillColor=#fef3c7;strokeColor=#d97706;fontColor=#78350f;fontStyle=1;fontSize=12;">
+          <mxGeometry as="geometry" x="980" y="312" width="116" height="24" />
+        </mxCell>
+        <mxCell id="generated-msw" value="Orval 自動生成" vertex="1" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=0;fillColor=#fef3c7;strokeColor=#d97706;fontColor=#78350f;fontStyle=1;fontSize=12;">
+          <mxGeometry as="geometry" x="778" y="444" width="116" height="24" />
+        </mxCell>
+        <mxCell id="generated-faker" value="Orval 自動生成" vertex="1" parent="1" style="rounded=1;arcSize=50;whiteSpace=wrap;html=0;fillColor=#fef3c7;strokeColor=#d97706;fontColor=#78350f;fontStyle=1;fontSize=12;">
+          <mxGeometry as="geometry" x="1007" y="444" width="116" height="24" />
+        </mxCell>
+        <mxCell id="generate-faker-factory" source="orval" target="faker" value="" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;endFill=1;strokeColor=#475569;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;exitX=0.72;exitY=1;entryX=0.5;entryY=1;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="poc-tests" name="PoC の合格条件と確認方法">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageWidth="1169" pageHeight="827">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="PoC の合格条件と確認方法" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=none;strokeColor=none;fontColor=#0f172a;fontSize=24;spacing=8;align=left;fontStyle=1;">
+          <mxGeometry as="geometry" x="45" y="35" width="1070" height="45" />
+        </mxCell>
+        <mxCell id="subtitle" value="左は何ができれば合格か。右はどの方法で確かめるか。AC1〜AC5 は計画書の受入基準の番号。" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=none;strokeColor=none;fontColor=#0f172a;fontSize=14;spacing=8;align=left;fontStyle=1;">
+          <mxGeometry as="geometry" x="45" y="90" width="1070" height="44" />
+        </mxCell>
+        <mxCell id="e2e" value="AC1  画面から在庫検索ができる&#10;指定の商品コードで GET が1回発生し、カードが2件表示される。" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#eff6ff;strokeColor=#93c5fd;fontColor=#0f172a;fontSize=15;spacing=8;align=left;spacingLeft=12;">
+          <mxGeometry as="geometry" x="45" y="165" width="580" height="75" />
+        </mxCell>
+        <mxCell id="e2e-detail" value="Playwright・Windows Chrome&#10;メニューから検索し、MSW の記録とカード表示を確認する。" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#eff6ff;strokeColor=#93c5fd;fontColor=#0f172a;fontSize=14;spacing=8;align=left;spacingLeft=12;">
+          <mxGeometry as="geometry" x="660" y="165" width="455" height="75" />
+        </mxCell>
+        <mxCell id="integration" value="AC2  入力・応答に応じて表示が変わる&#10;空白だけなら送信せず、値は前後の空白を除いて送る。&#10;空の結果や HTTP 500 に応じた表示になる。" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#f5f3ff;strokeColor=#c4b5fd;fontColor=#0f172a;fontSize=15;spacing=8;align=left;spacingLeft=12;">
+          <mxGeometry as="geometry" x="45" y="270" width="580" height="75" />
+        </mxCell>
+        <mxCell id="integration-detail" value="Vitest・Vue Test Utils・msw/node&#10;画面から検索し、送信内容と応答ごとの表示を確認する。" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#f5f3ff;strokeColor=#c4b5fd;fontColor=#0f172a;fontSize=14;spacing=8;align=left;spacingLeft=12;">
+          <mxGeometry as="geometry" x="660" y="270" width="455" height="75" />
+        </mxCell>
+        <mxCell id="unit" value="AC3  不正な応答で前回の結果が消えない&#10;条件ごとに結果を保持し、同じ条件では最新の要求を反映する。" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#ecfdf5;strokeColor=#6ee7b7;fontColor=#0f172a;fontSize=15;spacing=8;align=left;spacingLeft=12;">
+          <mxGeometry as="geometry" x="45" y="375" width="580" height="75" />
+        </mxCell>
+        <mxCell id="unit-detail" value="Vitest&#10;Zod 検証、Store の保持方法と同時取得を確認する。" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#ecfdf5;strokeColor=#6ee7b7;fontColor=#0f172a;fontSize=14;spacing=8;align=left;spacingLeft=12;">
+          <mxGeometry as="geometry" x="660" y="375" width="455" height="75" />
+        </mxCell>
+        <mxCell id="story" value="AC4  部品の表示と操作を確認できる&#10;検索パネルを開閉でき、カード・空・エラー状態を表示できる。" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#eff6ff;strokeColor=#93c5fd;fontColor=#0f172a;fontSize=15;spacing=8;align=left;spacingLeft=12;">
+          <mxGeometry as="geometry" x="45" y="480" width="580" height="75" />
+        </mxCell>
+        <mxCell id="story-detail" value="Storybook・Vitest アドオン&#10;固定値で部品を表示し、play で開閉を確認する。" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#eff6ff;strokeColor=#93c5fd;fontColor=#0f172a;fontSize=14;spacing=8;align=left;spacingLeft=12;">
+          <mxGeometry as="geometry" x="660" y="480" width="455" height="75" />
+        </mxCell>
+        <mxCell id="regen" value="AC5  同じ仕様から同じコードを生成できる" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#f8fafc;strokeColor=#cbd5e1;fontColor=#0f172a;fontSize=15;spacing=8;align=left;spacingLeft=12;">
+          <mxGeometry as="geometry" x="45" y="585" width="580" height="75" />
+        </mxCell>
+        <mxCell id="regen-detail" value="Orval の生成コマンド&#10;2回の出力を比較し、コミット後の再生成でも Git 差分がないか確認する。" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#f8fafc;strokeColor=#cbd5e1;fontColor=#0f172a;fontSize=14;spacing=8;align=left;spacingLeft=12;">
+          <mxGeometry as="geometry" x="660" y="585" width="455" height="75" />
+        </mxCell>
+        <mxCell id="criteria-heading" value="何ができれば合格か" vertex="1" parent="1" style="html=0;align=left;fontStyle=1;fontSize=16;fontColor=#0f172a;">
+          <mxGeometry as="geometry" x="45" y="132" width="580" height="27" />
+        </mxCell>
+        <mxCell id="method-heading" value="どう確かめるか" vertex="1" parent="1" style="html=0;align=left;fontStyle=1;fontSize=16;fontColor=#0f172a;">
+          <mxGeometry as="geometry" x="660" y="132" width="455" height="27" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="poc-store-reuse" name="一覧と詳細のレスポンス共有">
+    <mxGraphModel grid="1" gridSize="10" page="1" pageWidth="1169" pageHeight="827">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="一覧と詳細のレスポンス共有" vertex="1" parent="1" style="rounded=1;arcSize=8;whiteSpace=wrap;html=0;fillColor=none;strokeColor=none;fontColor=#0f172a;fontSize=24;spacing=8;align=left;fontStyle=1;">
+          <mxGeometry as="geometry" x="45" y="35" width="1070" height="46" />
+        </mxCell>
+        <mxCell id="scope" value="PoC は一覧での取得と表示まで。詳細画面での再利用は後続実装の構成案。" vertex="1" parent="1" style="rounded=1;arcSize=8;whiteSpace=wrap;html=0;fillColor=#f8fafc;strokeColor=#cbd5e1;fontColor=#0f172a;fontSize=14;spacing=8;">
+          <mxGeometry as="geometry" x="45" y="92" width="1070" height="44" />
+        </mxCell>
+        <mxCell id="api" value="アプリ側の API 処理&#10;Zod で検証した成功レスポンス" vertex="1" parent="1" style="rounded=1;arcSize=8;whiteSpace=wrap;html=0;fillColor=#f5f3ff;strokeColor=#c4b5fd;fontColor=#0f172a;fontSize=15;spacing=8;">
+          <mxGeometry as="geometry" x="415" y="160" width="330" height="76" />
+        </mxCell>
+        <mxCell id="store" value="在庫管理のレスポンス Store&#10;検索キーごとに検索結果・取得状態・エラーを保持&#10;例  商品 A001 → items[]" vertex="1" parent="1" style="rounded=1;arcSize=8;whiteSpace=wrap;html=0;fillColor=#ecfdf5;strokeColor=#6ee7b7;fontColor=#0f172a;fontSize=15;spacing=8;">
+          <mxGeometry as="geometry" x="360" y="300" width="440" height="108" />
+        </mxCell>
+        <mxCell id="list" value="検索・一覧画面&#10;確定した検索条件から一覧を参照&#10;検索結果をカードに表示" vertex="1" parent="1" style="rounded=1;arcSize=8;whiteSpace=wrap;html=0;fillColor=#eff6ff;strokeColor=#93c5fd;fontColor=#0f172a;fontSize=15;spacing=8;">
+          <mxGeometry as="geometry" x="45" y="510" width="400" height="103" />
+        </mxCell>
+        <mxCell id="detail" value="詳細画面（後続）&#10;検索キーと選択項目の識別子で同じ結果を参照&#10;選択した1件の情報を表示" vertex="1" parent="1" style="rounded=1;arcSize=8;whiteSpace=wrap;html=0;fillColor=#eff6ff;strokeColor=#93c5fd;fontColor=#0f172a;fontSize=15;spacing=8;dashed=1;">
+          <mxGeometry as="geometry" x="715" y="510" width="400" height="103" />
+        </mxCell>
+        <mxCell id="empty" value="詳細で使える項目は一覧から再利用する。一意の項目 ID、詳細専用 API の要否、直接表示・再読み込み時の再取得は後続で決める。" vertex="1" parent="1" style="rounded=1;arcSize=8;whiteSpace=wrap;html=0;fillColor=#f8fafc;strokeColor=#cbd5e1;fontColor=#0f172a;fontSize=14;spacing=8;">
+          <mxGeometry as="geometry" x="45" y="680" width="1070" height="55" />
+        </mxCell>
+        <mxCell id="save" value="検証済みデータを保存" edge="1" parent="1" source="api" target="store" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;endFill=1;strokeColor=#475569;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="list-read" value="一覧データ" edge="1" parent="1" source="store" target="list" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;endFill=1;strokeColor=#475569;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;exitX=0.15;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="detail-read" value="選択した1件" edge="1" parent="1" source="store" target="detail" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;endFill=1;strokeColor=#475569;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;exitX=0.85;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="navigate" value="カード選択 → 検索キーと項目の識別子を渡す" edge="1" parent="1" source="list" target="detail" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;endFill=1;strokeColor=#475569;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;exitX=1;exitY=0.5;entryX=0;entryY=0.5;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+        <mxCell id="ui-state" value="画面制御 Store（後続）&#10;一覧へ戻るときの確定条件・スクロール位置" vertex="1" parent="1" style="rounded=1;arcSize=8;whiteSpace=wrap;html=0;fillColor=#eff6ff;strokeColor=#93c5fd;fontColor=#0f172a;fontSize=15;spacing=8;">
+          <mxGeometry as="geometry" x="45" y="304" width="270" height="100" />
+        </mxCell>
+        <mxCell id="restore-list" value="一覧に戻るとき復元" edge="1" parent="1" source="ui-state" target="list" style="edgeStyle=orthogonalEdgeStyle;rounded=1;endArrow=block;endFill=1;strokeColor=#475569;strokeWidth=2;fontSize=13;labelBackgroundColor=#ffffff;exitX=0.5;exitY=1;entryX=0.5;entryY=0;">
+          <mxGeometry as="geometry" relative="1" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
