@@ -8,7 +8,8 @@
 
 ## 初回の疎通画面
 
-- 画面テストではプラグインの応答を差し替え、ボタンからの呼び出し、成功・失敗の表示、撮影のキャンセル（`OS-PLUG-CAMR-0006`）、権限拒否（`OS-PLUG-CAMR-0003`）、その他の撮影エラー、Web の案内を確認する。
+- Vitest と Vue Test Utils で、画面とアプリ側の呼び出し処理をつなぎ、プラグイン応答を差し替える。疎通確認ボタンで入力値が渡り、応答またはエラーが表示されることを確認する。
+- 撮影ボタンで固定の `webPath` を受け取り、画像表示が更新されることを確認する。キャンセル（`OS-PLUG-CAMR-0006`）では前回画像を保持し、権限拒否（`OS-PLUG-CAMR-0003`）とその他の撮影エラーでは対応する案内を表示する。Web での撮影操作では実機で確認する機能である旨を表示する。
 - 初期ルート `/` から疎通確認画面が開くことを確認する。
 
 [在庫 PoC の受入基準](../08-poc/ht-inventory-poc.md#受入基準とテスト)
@@ -156,6 +157,14 @@ setup((app, context) => {
 採用版の Storybook で `setup` に story のコンテキストが渡ることと、`@pinia/testing` が Pinia の採用版と互換であることを導入時に確認する。
 
 [Storybook の操作テスト](https://storybook.js.org/docs/writing-tests/interaction-testing) · [Pinia のテスト用 Store](https://pinia.vuejs.org/cookbook/testing.html)
+
+## 通信クライアントを確認する範囲
+
+Store の単体テストでは API 関数を差し替え、保存やエラー時の状態を確認する。API 境界の単体テストでは生成クライアントを差し替え、HTTP 判定・Zod 検証を確認する。いずれも MSW の起動は不要。
+
+在庫 PoC では、画面からの結合テストで生成クライアントも実行する。Node.js の MSW が Fetch を捕捉し、`GET /api/inventory?productCode=A001` が組み立てられたことを確認して応答を返す。Zod 検証、Store 更新、結果やエラーの表示までを確認する。この結合ケースを通信クライアントの送信内容の確認にも使うため、通信クライアント専用のテストは追加しない。
+
+[PoC のテストアーキテクチャ図](../08-poc/ht-inventory-poc-architecture.drawio)
 
 ## 結合で立証すること
 

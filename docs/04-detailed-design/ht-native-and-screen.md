@@ -13,16 +13,27 @@
 
 独自プラグインの契約は `HtBridge.ping({ message: string }) → { value: string, platform: 'web' | 'android' }` とする。疎通画面は Vuetify 4 で構成し、初期値が `ping` の入力欄、疎通確認ボタン、撮影ボタン、応答・画像・メッセージの表示欄を置く。疎通確認ボタンは入力欄の値を渡す。空のメッセージは両実装で `INVALID_MESSAGE` として拒否し、失敗時は画面に再試行できる旨を表示する。
 
+### ローカル Java プラグインの登録
+
+- `HtBridgePlugin.java` を `MainActivity.java` と同じ Java パッケージに置く。具体的なパッケージ名は初期セットアップ時のアプリ ID・名前空間に合わせる。
+- `Plugin` を継承し、クラスに `@CapacitorPlugin(name = "HtBridge")`、公開する `ping(PluginCall call)` に `@PluginMethod` を付ける。正常時は `call.resolve(result)`、空入力は `call.reject(message, "INVALID_MESSAGE")` で返す。Java の入力検証と成功応答の生成は JUnit で直接確認できる処理に分ける。
+- `MainActivity.onCreate` で `super.onCreate(savedInstanceState)` の前に `registerPlugin(HtBridgePlugin.class)` を呼ぶ。
+- TypeScript 側は `src/native/` で `registerPlugin<HtBridge>('HtBridge', { web: ... })` を定義し、Web 実装の読み込みを登録する。名前は Java のアノテーションと一致させる。画面側は `error.code` で `INVALID_MESSAGE` を判定する。
+
+[Capacitor のローカル Android プラグイン](https://capacitorjs.com/docs/android/custom-code)
+
+### 撮影権限と拒否の確認
+
 Android の `android/app/src/main/AndroidManifest.xml` に `android.permission.CAMERA` を宣言する。撮影ボタンを押した際の権限ダイアログで拒否するケースと、許可後に端末設定で権限を取り消して再撮影時の要求を拒否するケースを確認する。
 
 ## 実装仕様の決定状況
 
 | 決めること | 状況 | 現時点の内容 | 残っている判断・作業 |
 | --- | --- | --- | --- |
-| Java プラグインの契約 | 決定済み | `HtBridge.ping` の入力・固定応答・エラーを定義済み。 | 実装し、ブラウザと Android エミュレーターで疎通を確認する。 |
+| Java プラグインの契約 | 決定済み | `HtBridge.ping` の入力・固定応答・エラーを定義済み。 | 実装し、JUnit で入力検証と固定応答を確認する。ブラウザと Android エミュレーターで疎通を確認する。 |
 | 撮影時の挙動 | 決定済み | Android で撮影結果を表示する。キャンセル・権限拒否・その他の失敗・Web の挙動を定義済み。 | Android 実機で成功とエラーの手順を確認する。 |
 | 検索条件の保持 | 方針あり | 画面内だけの入力途中の値はローカル状態、画面間で共有・復元する状態は画面制御 Store。PoC 計画ではパネル状態と実行済み条件を画面制御 Store に置く。 | PoC でも画面内の状態に簡略化するかは、計画変更として決める。 |
 | レスポンス Store | 方針あり | 業務単位で設け、画面から取得 action を呼ぶ。検索条件別に結果を保持し、同じキーの取得失敗で前回結果を残す。 | 本番の検索キー、再取得・破棄、在庫更新後の無効化。 |
 | 一覧から詳細へのデータ再利用 | 方針あり | 同じ業務のレスポンス Store から一覧・詳細が照会できる構成を想定。 | 一意の項目 ID、詳細専用 API の要否、直接表示・再読み込み時の再取得。 |
 | API 契約と検証 | 方針あり | `open.yaml` から Orval で通信コードと Zod スキーマを生成する。PoC はアプリ側で HTTP を判定し、成功本文を `safeParse` する。 | 本番 API の項目、ステータス、エラー表示・再操作、通信中断の方針。 |
-| アーキテクチャ図と設計書の整合 | 未対応 | 設計書ではレスポンス Store が取得を担当する。 | 図の取得経路と失敗時の Store の更新経路をレビュー指摘に沿って修正し、再確認する。 |
+| アーキテクチャ図と設計書の整合 | 対応済み | レスポンス Store が取得し、失敗時に前回結果を保持する経路を図に反映した。 | [再レビュー済み](../reviews/ht-poc-architecture/03-rereview/README.md)。 |

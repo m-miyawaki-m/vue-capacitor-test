@@ -35,6 +35,8 @@
 | 知りたいこと | 概要 |
 | --- | --- |
 | [Orval・Zod・Faker・MSW の自動生成](04-detailed-design/ht-api.md#在庫-poc-の自動生成手順) | `open.yaml` と Orval 設定を用意し、`npm run api:generate` で Fetch クライアント、型、Zod スキーマ、モックを生成する。 |
+| [HTTP モックとテスト手段の比較](06-integration-test/ht-http-mock-comparison.md) | Prism・Faker・Vitest・MSW を比較し、Vitest＋MSW で確認できる通信の範囲を整理する。 |
+| [通信クライアントを確認する範囲](06-integration-test/README.md#通信クライアントを確認する範囲) | 単体は API 関数を差し替え、画面からの結合は生成クライアントを通して送信内容と表示を確認する。 |
 | [テスト用の値と応答の差し替え](06-integration-test/README.md#msw-によるテストデータの切り替え) | MSW で固定2件、空配列、HTTP 500、Zod 検証に失敗する本文を返す。再取得に失敗しても前回の結果が残ることを Vitest で確認する。 |
 | [Vitest と Storybook の連携](05-unit-test/README.md#vitest-と-storybook-の連携手順) | Storybook の Vitest アドオンを設定し、`args` で部品の初期状態、`play` で操作と期待結果を指定する。 |
 | [Vitest でのレスポンス Store 単体テスト](05-unit-test/README.md#レスポンス-store-の単体テスト) | テストごとに Pinia を作り、API を差し替えて取得 action と保存状態を確認する。HTTP 判定・Zod 検証の単体観点も参照できる。 |
@@ -54,8 +56,8 @@
 | --- | --- |
 | 01 要件定義 | [対象業務、初回範囲、受入基準](01-requirements/ht-design.md) |
 | 02 基本設計 | [レイアウトとコンポーネント](02-basic-design/ht-layout-components.md) · [画面・遷移図](02-basic-design/ht-screen-layout.drawio) |
-| 03 概要設計 | [構成と技術方針](03-overview-design/ht-technical-research.md) |
-| 04 詳細設計 | [API 生成と実行時検証](04-detailed-design/ht-api.md) · [Pinia の状態管理](04-detailed-design/ht-store.md) · [画面とネイティブ疎通](04-detailed-design/ht-native-and-screen.md) · [Vue・Vuetify の部品設計](04-detailed-design/ht-vue-components.md) |
+| 03 概要設計 | [構成と技術方針](03-overview-design/ht-technical-research.md) · [Android アプリのアーキテクチャ](03-overview-design/ht-android-architecture.md) · [Android 機能の立証範囲](03-overview-design/ht-android-architecture.md#機能ごとの立証範囲) · [Android のレイヤー構成と環境別の確認範囲（draw.io）](03-overview-design/ht-android-architecture.drawio) · [VS Code とエミュレーターでの開発](03-overview-design/ht-android-architecture.md#vs-code-とエミュレーターでの開発) · [独自プラグインの登録](04-detailed-design/ht-native-and-screen.md#ローカル-java-プラグインの登録) |
+| 04 詳細設計 | [API 生成と実行時検証](04-detailed-design/ht-api.md) · [Pinia の状態管理](04-detailed-design/ht-store.md) · [TanStack Query の導入判断](04-detailed-design/ht-tanstack-query-pinia.md)（現行 PoC は Pinia） · [画面とネイティブ疎通](04-detailed-design/ht-native-and-screen.md) · [Vue・Vuetify の部品設計](04-detailed-design/ht-vue-components.md) |
 | 05 単体テスト | [ロジック・Store・コンポーネントの確認](05-unit-test/README.md) |
 | 06 結合テスト | [画面・Store・API 境界の連携確認](06-integration-test/README.md) |
 | 07 総合テスト | [ブラウザ E2E と Android 受入確認](07-system-test/README.md) |

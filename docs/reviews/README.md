@@ -14,6 +14,9 @@
 | Vitest の Store 単体・Storybook の UI 連携の追記 | [初回レビュー済み](ht-test-methods/01-review/README.md) | [対応済み](ht-test-methods/02-response/README.md) | [Claude 同意・must 0件](ht-test-methods/03-rereview/README.md) | コード例の実行は未確認。 |
 | Vue 3・Vuetify 4 のコンポーネント実装方針 | [初回レビュー済み](ht-vue-components/01-review/README.md) | [対応済み](ht-vue-components/02-response/README.md) | [Claude 同意・must 0件](ht-vue-components/03-rereview/README.md) | PoC 実装とテスト例の実行は未確認。 |
 | テスト方針と業務シナリオ | [初回レビュー済み](ht-test-strategy/01-review/README.md) | [対応済み](ht-test-strategy/02-response/README.md) | [Claude 同意・must 0件](ht-test-strategy/03-rereview/README.md) | テストコードの作成・実行は未実施。 |
+| TanStack Query と Pinia の使い分け | [検討案に同意・must 0件](ht-tanstack-query/01-review/README.md) | [対応済み](ht-tanstack-query/02-response/README.md) | [Claude 同意・must 0件](ht-tanstack-query/03-rereview/README.md) | 現行 PoC は Pinia と判断。Query の動作確認は未実施。 |
+| Android アプリのアーキテクチャ | [Claude 同意・must 0件](ht-android-architecture/01-review/README.md) | [対応済み](ht-android-architecture/03-rereview/README.md) | [追加分レビュー同意・must 0件](ht-android-architecture/03-rereview/README.md) | JUnit の実行、APK の起動と実機検証は未実施。 |
+| 在庫 PoC の HTTP モック比較 | [Claude 同意・must 0件](ht-http-mock-comparison/01-review/README.md) | 指摘反映済み | — | PoC への採用判断と実走は未実施。 |
 
 「—」は指摘対応や再レビューの記録がない項目を示す。
 
