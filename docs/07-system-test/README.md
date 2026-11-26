@@ -11,12 +11,12 @@
 
 ## 初回のネイティブ受入確認
 
-ビルドとテストには `npm run lint`、`npm run type-check`、`npm run test:unit -- --run`、`npm run build`、`npx cap sync android`、Android ディレクトリで `./gradlew assembleDebug` を実行する。
+ビルドとテストには `npm run lint`、`npm run type-check`、`npm run test:unit -- --run`、`npm run build`、`npx cap sync android`、Android ディレクトリで Gradle Wrapper の `testDebugUnitTest` と `assembleDebug` を実行する。Windows の PowerShell では `.\gradlew.bat testDebugUnitTest assembleDebug`、Linux では `./gradlew testDebugUnitTest assembleDebug` を使う。
 
 | 操作 | 期待結果 |
 | --- | --- |
 | ブラウザで「疎通確認」を押す | 画面と開発者コンソールに `{ value: 'pong', platform: 'web' }` が出る |
-| Android エミュレーターで「疎通確認」を押す | Java 実装を含むビルドが成功し、画面に `{ value: 'pong', platform: 'android' }` が出る。`adb logcat -s HtBridge` で `ping received` を確認できる |
+| Android エミュレーターで「疎通確認」を押す | Java 実装を含むビルドが成功し、画面に `{ value: 'pong', platform: 'android' }` が出る。`adb logcat -s HtBridge:D` で `ping received` を確認できる |
 | Android エミュレーターで入力を空にして「疎通確認」を押す | Java 実装が `INVALID_MESSAGE` を返し、再試行の案内が表示される |
 | Android 実機で「撮影」を押して撮影する | 公式 Camera の `takePhoto` が返した `webPath` で撮影画像を表示できる |
 | 撮影をキャンセルする（`OS-PLUG-CAMR-0006`） | 元の画面に戻り、既存の画像を保持する。キャンセルの通知は表示しない |
@@ -26,7 +26,7 @@
 
 [Capacitor Camera 公式プラグイン](https://github.com/ionic-team/capacitor-camera)
 
-- 手動の受入確認は、上の表に沿ってブラウザ、Android エミュレーター、Android 実機を使う。Java 側の不正入力はエミュレーターで空入力を送って確認し、カメラ権限拒否は実機で確認する。権限を拒否する手順はプラグイン詳細設計を参照する。実測結果は日付、環境（機種または仮想端末、OS・API レベル）、ビルド種別、操作、期待結果、実測・合否、必要なログを記録する。
+- 手動の受入確認は、上の表に沿ってブラウザ、Android エミュレーター、Android 実機を使う。Java 側の不正入力はエミュレーターで空入力を送って確認し、カメラ権限拒否は実機で確認する。権限を拒否する手順はプラグイン詳細設計を参照する。JUnit の結果を作業記録に残す。実測結果は日付、環境（機種または仮想端末、OS・API レベル）、ビルド種別、操作、期待結果、実測・合否、必要なログを記録する。
 
 [撮影権限の宣言と拒否の再現手順](../04-detailed-design/ht-native-and-screen.md#初回の疎通画面とプラグイン)
 

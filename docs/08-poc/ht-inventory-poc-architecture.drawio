@@ -207,13 +207,13 @@
         <mxCell id="integration" value="AC2  入力・応答に応じて表示が変わる&#10;空白だけなら送信せず、値は前後の空白を除いて送る。&#10;空の結果や HTTP 500 に応じた表示になる。" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#f5f3ff;strokeColor=#c4b5fd;fontColor=#0f172a;fontSize=15;spacing=8;align=left;spacingLeft=12;">
           <mxGeometry as="geometry" x="45" y="270" width="580" height="75" />
         </mxCell>
-        <mxCell id="integration-detail" value="Vitest・Vue Test Utils・msw/node&#10;画面から検索し、送信内容と応答ごとの表示を確認する。" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#f5f3ff;strokeColor=#c4b5fd;fontColor=#0f172a;fontSize=14;spacing=8;align=left;spacingLeft=12;">
+        <mxCell id="integration-detail" value="Vitest・Vue Test Utils・msw/node&#10;生成クライアントを実行し、MSW が Fetch を捕捉。GET のパス・クエリと画面表示を確認する。" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#f5f3ff;strokeColor=#c4b5fd;fontColor=#0f172a;fontSize=14;spacing=8;align=left;spacingLeft=12;">
           <mxGeometry as="geometry" x="660" y="270" width="455" height="75" />
         </mxCell>
         <mxCell id="unit" value="AC3  不正な応答で前回の結果が消えない&#10;条件ごとに結果を保持し、同じ条件では最新の要求を反映する。" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#ecfdf5;strokeColor=#6ee7b7;fontColor=#0f172a;fontSize=15;spacing=8;align=left;spacingLeft=12;">
           <mxGeometry as="geometry" x="45" y="375" width="580" height="75" />
         </mxCell>
-        <mxCell id="unit-detail" value="Vitest&#10;Zod 検証、Store の保持方法と同時取得を確認する。" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#ecfdf5;strokeColor=#6ee7b7;fontColor=#0f172a;fontSize=14;spacing=8;align=left;spacingLeft=12;">
+        <mxCell id="unit-detail" value="Vitest 単体&#10;Store の API 関数を差し替える。API 境界の単体では生成クライアントを差し替える。" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#ecfdf5;strokeColor=#6ee7b7;fontColor=#0f172a;fontSize=14;spacing=8;align=left;spacingLeft=12;">
           <mxGeometry as="geometry" x="660" y="375" width="455" height="75" />
         </mxCell>
         <mxCell id="story" value="AC4  部品の表示と操作を確認できる&#10;検索パネルを開閉でき、カード・空・エラー状態を表示できる。" vertex="1" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=0;fillColor=#eff6ff;strokeColor=#93c5fd;fontColor=#0f172a;fontSize=15;spacing=8;align=left;spacingLeft=12;">
@@ -233,6 +233,9 @@
         </mxCell>
         <mxCell id="method-heading" value="どう確かめるか" vertex="1" parent="1" style="html=0;align=left;fontStyle=1;fontSize=16;fontColor=#0f172a;">
           <mxGeometry as="geometry" x="660" y="132" width="455" height="27" />
+        </mxCell>
+        <mxCell id="client-test-scope" value="通信クライアント専用テストは追加しない。画面からの結合テストで送信内容まで確認する。" vertex="1" parent="1" style="rounded=1;html=0;whiteSpace=wrap;fillColor=#f8fafc;strokeColor=#cbd5e1;fontSize=14;fontColor=#0f172a;">
+          <mxGeometry as="geometry" x="45" y="699" width="1070" height="53" />
         </mxCell>
       </root>
     </mxGraphModel>

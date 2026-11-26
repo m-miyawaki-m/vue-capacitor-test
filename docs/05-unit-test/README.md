@@ -8,7 +8,7 @@
 
 複数の部品を実際につないでイベントの受け渡しを見る場合は、[Storybook の UI コンポーネント間連携](../06-integration-test/README.md#storybook-で確認する-ui-コンポーネント間の連携) に置く。
 
-Web 版の `HtBridge` は Vitest で固定応答と不正入力を確認する。
+[Android 疎通と撮影の単体テスト](#android-疎通と撮影の単体テスト) では、Web 版プラグインと撮影結果の判定を確認する。
 
 [Vue のテストガイド](https://vuejs.org/guide/scaling-up/testing.html) · [Storybook の Vitest アドオン](https://storybook.js.org/docs/writing-tests/integrations/vitest-addon/index) · [在庫 PoC の受入基準](../08-poc/ht-inventory-poc.md#受入基準とテスト)
 
@@ -159,3 +159,14 @@ Vitest で生成 Fetch クライアントの呼び出しを差し替える。手
 | UT-INV-04 | API 境界・AC3 | 生成クライアントが HTTP 200 と、在庫数を文字列にした本文を返す。 | 在庫取得関数を呼ぶ。 | `kind: 'contract'` のエラーになる。 | Vitest・作成予定 |
 | UT-INV-05 | 検索フォーム・AC4 | 閉じたフォームに固定 props を渡す。 | story を開き、見出しを押す。 | パネルが開き、商品コード入力欄が表示される。 | Storybook・作成予定 |
 | UT-INV-06 | `InventoryResultCard` と `InventorySearchResults`・AC4 | カード用データ、空、エラーの story をそれぞれ準備する。 | 各 story を表示する。 | 商品名・在庫数、結果なし、取得エラーがそれぞれの状態で表示される。 | Storybook・作成予定 |
+
+
+## Android 疎通と撮影の単体テスト
+
+Vitest で、Web 版 `HtBridge.ping` の固定応答と空入力の拒否を確認する。撮影処理ではプラットフォーム判定と公式 Camera を差し替え、成功時に表示用の `webPath` を取得すること、キャンセル・権限拒否・その他の失敗を分類できること、Web では Camera を呼ばないことを確認する。
+
+Java 側の単体テストには JUnit を使う。入力検証・固定応答の生成を純粋な Java の処理として切り出し、Android SDK の実行時 API、`PluginCall`、`android.util.Log` との接続はプラグイン側が担当する。JUnit では正常な入力から返す値と、空入力を拒否する判定を確認する。テストは `android/app/src/test/java/` に置き、`android/` で Gradle Wrapper の `testDebugUnitTest` を実行する。Windows は `gradlew.bat`、Linux は `./gradlew` を使う。
+
+[Android のローカル単体テスト](https://developer.android.com/training/testing/local-tests)
+
+[Android アーキテクチャの立証範囲](../03-overview-design/ht-android-architecture.md#機能ごとの立証範囲)

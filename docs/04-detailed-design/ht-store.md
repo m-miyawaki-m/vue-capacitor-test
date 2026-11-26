@@ -29,3 +29,5 @@ Store の action と保存ルールは Vitest で確認し、詳細から戻っ�
 ## 導入時の確認
 
 - 同じ検索条件の再取得、別の検索条件への切り替え、在庫更新後、詳細から戻った場合の保持ルールを具体化する。
+
+現行の在庫 PoC は Pinia のレスポンス Store を採用する。TanStack Query を見送る理由と再検討条件は [TanStack Query の導入判断](ht-tanstack-query-pinia.md) を参照する。
